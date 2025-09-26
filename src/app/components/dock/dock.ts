@@ -18,7 +18,7 @@ import { RouterLink, RouterLinkActive} from '@angular/router';
           </g>
         </svg>
       </a>
-      <a>
+      <a routerLink="/places" routerLinkActive="dock-active">
         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
              stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
              class="size-[1.2em]">
@@ -29,26 +29,22 @@ import { RouterLink, RouterLinkActive} from '@angular/router';
         </svg>
       </a>
 
-      <div class="grid place-content-center">
-        <button class="btn btn-primary btn-circle btn-lg">
-          <svg class="size-[1.2em]" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
-               fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-          >
-            <path d="M5 12h14"/>
-            <path d="M12 5v14"/>
-          </svg>
-        </button>
-
-      </div>
-
-
-      <a routerLink="/likes" routerLinkActive="dock-active">
+      <a routerLink="/food" routerLinkActive="dock-active">
         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
              stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
              class="size-[1.2em]">
+          <path d="M3 2v7c0 1.1.9 2 2 2h4a2 2 0 0 0 2-2V2"/>
+          <path d="M7 2v20"/>
+          <path d="M21 15V2a5 5 0 0 0-5 5v6c0 1.1.9 2 2 2h3Zm0 0v7"/>
+        </svg>
+      </a>
 
+      <a routerLink="/tracker" routerLinkActive="dock-active">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+             stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+             class="size-[1.2em]">
           <path
-            d="M2 9.5a5.5 5.5 0 0 1 9.591-3.676.56.56 0 0 0 .818 0A5.49 5.49 0 0 1 22 9.5c0 2.29-1.5 4-3 5.5l-5.492 5.313a2 2 0 0 1-3 .019L5 15c-1.5-1.5-3-3.2-3-5.5"/>
+            d="M22 12h-2.48a2 2 0 0 0-1.93 1.46l-2.35 8.36a.25.25 0 0 1-.48 0L9.24 2.18a.25.25 0 0 0-.48 0l-2.35 8.36A2 2 0 0 1 4.49 12H2"/>
         </svg>
       </a>
 

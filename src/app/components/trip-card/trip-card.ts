@@ -2,25 +2,6 @@ import {Component, computed, input} from '@angular/core';
 import {Trip} from '../../models/trip';
 import {DatePipe} from '@angular/common';
 
-export interface TripCardProps {
-  id: string;
-  userId: string;
-  title: string;
-  description: string;
-  location: string;
-  coverImageUrl: string;
-  startDate: Date;
-  endDate: Date;
-  participants?: string[];
-  status?: 'upcoming' | 'ongoing' | 'completed' | 'cancelled';
-  type?: 'vacation' | 'business' | 'solo' | 'family';
-  budget?: number;
-  currency?: string;
-  createdAt: Date;
-  updatedAt: Date;
-  isDeleted: boolean;
-}
-
 @Component({
   selector: 'app-trip-card',
   template: `

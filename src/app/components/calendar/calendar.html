@@ -1,0 +1,53 @@
+<div class="card bg-base-100 shadow-md w-full max-w-sm md:max-w-4xl mx-auto">
+  <div class="card-body p-3">
+    <!-- Header -->
+    <div class="flex justify-between items-center mb-3">
+      <h2 class="text-xs font-medium text-base-content/70 uppercase tracking-wide">
+        {{ currentMonthYear() }}
+      </h2>
+      <button
+        class="btn btn-primary btn-xs text-xs px-3"
+        (click)="goToToday()">
+        Today
+      </button>
+    </div>
+
+    <cdk-virtual-scroll-viewport
+      itemSize="60"
+      class="w-full h-20 rounded-lg"
+      orientation="horizontal"
+      (scrolledIndexChange)="onScrollIndexChange($event)">
+
+      <div
+        *cdkVirtualFor="let day of days(); trackBy: trackByDate"
+        class="flex-none w-14 h-18 mx-0.5 first:ml-1 last:mr-1">
+
+        <button
+          (click)="selectDate(day)"
+          class="btn btn-ghost flex flex-col h-full w-full p-1.5 rounded-xl transition-all duration-200"
+          [class.btn-primary]="day.isToday && !day.isSelected"
+          [class.btn-active]="day.isSelected"
+          [class.ring-2]="day.isHighlighted"
+          [class.ring-accent]="day.isHighlighted"
+          [class.ring-offset-1]="day.isHighlighted">
+
+          <!-- Day of Week -->
+          <span class="text-[10px] font-medium text-base-content/60 mb-0.5">
+            {{ day.dayOfWeek }}
+          </span>
+
+          <!-- Day Number -->
+          <span class="text-lg font-bold leading-none">
+            {{ day.dayOfMonth }}
+          </span>
+
+          <!-- Highlight Indicator -->
+          @if (day.isHighlighted) {
+            <div class="w-1.5 h-1.5 bg-accent rounded-full mt-1"></div>
+          }
+        </button>
+      </div>
+
+    </cdk-virtual-scroll-viewport>
+  </div>
+</div>
