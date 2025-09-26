@@ -24,7 +24,7 @@ export interface Day {
 
 const getDefaultMaxDate = (): Date => {
   const date = new Date();
-  date.setFullYear(date.getFullYear() + 2);
+  date.setFullYear(date.getFullYear() + 10);
   return date;
 };
 
@@ -34,18 +34,19 @@ const getDefaultMaxDate = (): Date => {
   templateUrl: './calendar.html',
   styleUrls: ['./calendar.css'],
 })
-export class Calendar implements OnInit{
+export class Calendar implements OnInit {
   highlightedDates = input.required<Date[]>();
   dateSelected = output<Date>();
 
   maxDate = input<Date>(getDefaultMaxDate());
+  minDate = input<Date>(new Date(1900, 0, 1));
 
   selectedDate = model<Date | null>(null);
 
   ngOnInit() {
-    setTimeout(()=>{
+    setTimeout(() => {
       this.goToToday()
-    },10)
+    }, 10)
   }
 
   private readonly SCROLL_BUFFER = 4;
@@ -58,16 +59,32 @@ export class Calendar implements OnInit{
   private viewedDate = signal<Date>(this.getStartOfDay(this.selectedDate() || new Date()));
   private scrollCorrectionIndex = signal<number | null>(null);
 
-  viewport = viewChild.required(CdkVirtualScrollViewport);
+  isPickingYear = signal(false);
+
+  private firstYearInView = signal(new Date().getFullYear() - 10);
+  private yearCount = signal(21);
+  private yearScrollCorrectionIndex = signal<number | null>(null);
+
+  dayViewport = viewChild.required('dayViewport', { read: CdkVirtualScrollViewport });
+  yearViewport = viewChild('yearViewport', { read: CdkVirtualScrollViewport });
 
   private scrollCorrector = effect(() => {
     const index = this.scrollCorrectionIndex();
     if (index !== null) {
-      this.viewport().scrollToIndex(index, 'auto');
+      this.dayViewport().scrollToIndex(index, 'auto');
       this.scrollCorrectionIndex.set(null);
       setTimeout(() => (this.isLoading = false), 200);
     }
   });
+
+  private yearScrollCorrector = effect(() => {
+    const index = this.yearScrollCorrectionIndex();
+    if (index !== null && this.yearViewport()) {
+      this.yearViewport()!.scrollToIndex(index, 'auto');
+      this.yearScrollCorrectionIndex.set(null);
+    }
+  });
+
 
   private getStartOfDay(date: Date): Date {
     const newDate = new Date(date);
@@ -118,15 +135,30 @@ export class Calendar implements OnInit{
     return daysArray;
   });
 
-  protected currentMonthYear = computed(() => {
+  protected currentMonth = computed(() => {
     const date = this.viewedDate();
-    return date.toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
+    return date.toLocaleDateString('en-US', { month: 'long' });
   });
+
+  protected currentYear = computed(() => {
+    const date = this.viewedDate();
+    return date.getFullYear();
+  });
+
+  protected years = computed(() => {
+    const start = this.firstYearInView();
+    const count = this.yearCount();
+    return Array.from({ length: count }, (_, i) => start + i);
+  });
+
 
   private todayIndex = computed(() => this.days().findIndex(day => day.isToday));
 
   private initialScroll = afterNextRender(() => {
-    this.scrollToToday();
+    const index = this.todayIndex();
+    if (index > -1) {
+      setTimeout(() => this.dayViewport().scrollToIndex(index, 'smooth'), 0);
+    }
   });
 
   protected selectDate(selectedDay: Day): void {
@@ -137,14 +169,11 @@ export class Calendar implements OnInit{
   }
 
   protected goToToday(): void {
-    const today = this.days()[this.todayIndex()];
-    if (today) {
-      this.selectDate(today);
-    }
-    this.scrollToToday();
+    this.goToDate(new Date());
+    this.isPickingYear.set(false);
   }
 
-  protected onScrollIndexChange(index: number): void {
+  protected onDayScrollIndexChange(index: number): void {
     if (this.isLoading) {
       return;
     }
@@ -175,12 +204,64 @@ export class Calendar implements OnInit{
     }
   }
 
-  private scrollToToday(): void {
-    const index = this.todayIndex();
-    if (index > -1) {
-      setTimeout(() => this.viewport().scrollToIndex(index, 'smooth'), 0);
+  protected onYearScrollIndexChange(index: number): void {
+    const years = this.years();
+    const yearChunk = 10;
+
+    if (index >= years.length - this.SCROLL_BUFFER && years[years.length - 1] < this.maxDate().getFullYear()) {
+      this.yearCount.update(c => c + yearChunk);
+    } else if (index <= this.SCROLL_BUFFER && years[0] > this.minDate().getFullYear()) {
+      this.firstYearInView.update(y => y - yearChunk);
+      this.yearCount.update(c => c + yearChunk);
+      this.yearScrollCorrectionIndex.set(index + yearChunk);
     }
   }
 
   protected trackByDate = (index: number, day: Day): string => this.getDateString(day.date);
+  protected trackByYear = (index: number, year: number): number => year;
+
+  protected toggleYearPicker(): void {
+    const currentlyPicking = this.isPickingYear();
+    if (!currentlyPicking) {
+      const currentYear = this.currentYear();
+      const yearOffset = 10;
+      this.firstYearInView.set(currentYear - yearOffset);
+      this.yearCount.set(yearOffset * 2 + 1);
+
+      setTimeout(() => {
+        const yearIndex = this.years().findIndex(y => y === currentYear);
+        if (this.yearViewport() && yearIndex > -1) {
+          this.yearViewport()!.scrollToIndex(yearIndex, 'auto');
+        }
+      }, 0);
+    }
+    this.isPickingYear.set(!currentlyPicking);
+  }
+
+
+  protected selectYear(year: number): void {
+    const currentViewedDate = this.viewedDate();
+    const targetDate = new Date(year, currentViewedDate.getMonth(), 1);
+    this.goToDate(targetDate);
+    this.isPickingYear.set(false);
+  }
+
+  private goToDate(date: Date): void {
+    this.isLoading = true;
+    const cleanDate = this.getStartOfDay(date > this.maxDate() ? this.maxDate() : date);
+
+    this.viewedDate.set(cleanDate);
+    this.selectedDate.set(cleanDate);
+
+    const daysToRender = 365 * 2;
+    const newStartDate = new Date(cleanDate);
+    newStartDate.setDate(cleanDate.getDate() - Math.floor(daysToRender / 2));
+
+    this.numberOfDays.set(daysToRender);
+    this.startDate.set(this.getStartOfDay(newStartDate));
+
+    const newIndex = Math.floor(daysToRender / 2);
+    this.scrollCorrectionIndex.set(newIndex);
+    this.dateSelected.emit(cleanDate);
+  }
 }

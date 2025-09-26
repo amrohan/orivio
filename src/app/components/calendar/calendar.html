@@ -2,9 +2,16 @@
   <div class="card-body p-3">
     <!-- Header -->
     <div class="flex justify-between items-center mb-3">
-      <h2 class="text-xs font-medium text-base-content/70 uppercase tracking-wide">
-        {{ currentMonthYear() }}
-      </h2>
+      <div class="flex items-baseline space-x-1">
+        <h2 class="text-xs font-medium text-base-content/70 uppercase tracking-wide">
+          {{ currentMonth() }}
+        </h2>
+        <button
+          class="btn btn-ghost btn-xs text-xs px-1 font-medium text-base-content/70 uppercase tracking-wide"
+          (click)="toggleYearPicker()">
+          {{ currentYear() }}
+        </button>
+      </div>
       <button
         class="btn btn-primary btn-xs text-xs px-3"
         (click)="goToToday()">
@@ -12,42 +19,65 @@
       </button>
     </div>
 
-    <cdk-virtual-scroll-viewport
-      itemSize="60"
-      class="w-full h-20 rounded-lg"
-      orientation="horizontal"
-      (scrolledIndexChange)="onScrollIndexChange($event)">
+    <div class="relative w-full h-20 rounded-lg">
+      <!-- Day Scroller -->
+      <cdk-virtual-scroll-viewport
+        #dayViewport
+        itemSize="60"
+        class="w-full h-full"
+        orientation="horizontal"
+        (scrolledIndexChange)="onDayScrollIndexChange($event)">
 
-      <div
-        *cdkVirtualFor="let day of days(); trackBy: trackByDate"
-        class="flex-none w-14 h-18 mx-0.5 first:ml-1 last:mr-1">
+        <div
+          *cdkVirtualFor="let day of days(); trackBy: trackByDate"
+          class="flex-none w-14 h-18 mx-0.5 first:ml-1 last:mr-1">
 
-        <button
-          (click)="selectDate(day)"
-          class="btn btn-ghost flex flex-col h-full w-full p-1.5 rounded-xl transition-all duration-200"
-          [class.btn-primary]="day.isToday && !day.isSelected"
-          [class.btn-active]="day.isSelected"
-          [class.ring-2]="day.isHighlighted"
-          [class.ring-accent]="day.isHighlighted"
-          [class.ring-offset-1]="day.isHighlighted">
+          <button
+            (click)="selectDate(day)"
+            class="btn btn-ghost flex flex-col h-full w-full p-1.5 rounded-xl transition-all duration-200"
+            [class.btn-primary]="day.isToday && !day.isSelected"
+            [class.btn-active]="day.isSelected"
+            [class.ring-2]="day.isHighlighted"
+            [class.ring-accent]="day.isHighlighted"
+            [class.ring-offset-1]="day.isHighlighted">
 
-          <!-- Day of Week -->
-          <span class="text-[10px] font-medium text-base-content/60 mb-0.5">
-            {{ day.dayOfWeek }}
-          </span>
+            <span class="text-[10px] font-medium text-base-content/60 mb-0.5">
+              {{ day.dayOfWeek }}
+            </span>
+            <span class="text-lg font-bold leading-none">
+              {{ day.dayOfMonth }}
+            </span>
 
-          <!-- Day Number -->
-          <span class="text-lg font-bold leading-none">
-            {{ day.dayOfMonth }}
-          </span>
+            @if (day.isHighlighted) {
+              <div class="w-1.5 h-1.5 bg-accent rounded-full mt-1"></div>
+            }
+          </button>
+        </div>
+      </cdk-virtual-scroll-viewport>
 
-          <!-- Highlight Indicator -->
-          @if (day.isHighlighted) {
-            <div class="w-1.5 h-1.5 bg-accent rounded-full mt-1"></div>
-          }
-        </button>
-      </div>
+      <!-- Year Scroller -->
+      @if (isPickingYear()) {
+        <div class="absolute inset-0 bg-base-100/80 backdrop-blur-sm z-10 rounded-lg">
+          <cdk-virtual-scroll-viewport
+            #yearViewport
+            itemSize="70"
+            class="w-full h-full"
+            orientation="horizontal"
+            (scrolledIndexChange)="onYearScrollIndexChange($event)">
 
-    </cdk-virtual-scroll-viewport>
+            <div
+              *cdkVirtualFor="let year of years(); trackBy: trackByYear"
+              class="flex items-center justify-center h-full w-15">
+              <button
+                (click)="selectYear(year)"
+                class="btn btn-sm"
+                [class.btn-active]="year === currentYear()">
+                {{ year }}
+              </button>
+            </div>
+          </cdk-virtual-scroll-viewport>
+        </div>
+      }
+    </div>
   </div>
 </div>
