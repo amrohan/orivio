@@ -23,7 +23,7 @@ import { DatePipe } from '@angular/common';
         <!-- SOFT FADE OVERLAY (very light) -->
         <div
           class="absolute inset-0
-             bg-gradient-to-t
+             bg-linear-to-t
              from-black/40
              via-black/10
              to-transparent"
@@ -32,7 +32,7 @@ import { DatePipe } from '@angular/common';
         <!-- BOTTOM GLOW (helps text readability without harshness) -->
         <div
           class="absolute bottom-0 left-0 right-0 h-32
-             bg-gradient-to-t from-black/50 to-transparent"
+             bg-linear-to-t from-black/50 to-transparent"
         ></div>
       </figure>
 
@@ -46,7 +46,7 @@ import { DatePipe } from '@angular/common';
           <!-- TITLE -->
           <h2
             class="card-title text-xl md:text-2xl font-semibold
-               bg-gradient-to-t from-white to-white/70
+               bg-linear-to-t from-white to-white/70
                bg-clip-text text-transparent
                drop-shadow-[0_2px_6px_rgba(0,0,0,0.6)]"
           >
@@ -56,7 +56,7 @@ import { DatePipe } from '@angular/common';
           <!-- SUBTEXT -->
           <p
             class="text-sm
-               bg-gradient-to-t from-white/90 to-white/50
+               bg-linear-to-t from-white/90 to-white/50
                bg-clip-text text-transparent"
           >
             Your trip starts in
@@ -66,7 +66,7 @@ import { DatePipe } from '@angular/common';
           <!-- DATE -->
           <p
             class="text-xs
-               bg-gradient-to-t from-white/80 to-white/40
+               bg-linear-to-t from-white/80 to-white/40
                bg-clip-text text-transparent"
           >
             {{ trip().startDate | date: 'MMM d' }} -
