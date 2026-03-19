@@ -1,8 +1,6 @@
 import { Component, signal } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-import { Dashboard } from './pages/dashboard/dashboard';
-import {Dock} from './components/dock/dock';
-import {SearchBar} from './components/header/search-bar.component';
+import { Dock } from './components/dock/dock';
 
 @Component({
   selector: 'app-root',
