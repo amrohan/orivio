@@ -29,65 +29,38 @@ export interface TripFormModel {
   template: `
     <app-back-button/>
 
-    <div class="card bg-base-100 w-full z-30">
+    <div class="card bg-base-100 w-full z-30 max-w-5xl mx-auto min-h-dvh">
       <div class="card-body px-1">
         <div class="space-y-4 w-full">
           <h2 class="card-title text-center w-full">Create Trip</h2>
           <form (ngSubmit)="submit()" class="space-y-2" novalidate>
-            <!-- BASIC INFO -->
-            <fieldset>
-              <!-- TITLE -->
-              <label class="fieldset-legend">Title</label>
-              <input class="input input-bordered w-full" placeholder="Vacation in Paris" [formField]="tripForm.title"/>
-              @if (tripForm.title().touched() && tripForm.title().invalid()) {
-                @for (trip of tripForm.title().errors(); track $index) {
-                  <p class="text-error text-sm">{{ trip.message }}</p>
-                }
-              }
-            </fieldset>
 
-            <!-- LOCATION -->
-            <fieldset>
-              <label class="fieldset-legend mt-3">Location</label>
-              <input class="input input-bordered w-full" placeholder="Italy" [formField]="tripForm.location"/>
-              @if (tripForm.location().touched() && tripForm.location().invalid()) {
-                @for (trip of tripForm.location().errors(); track $index) {
-                  <p class="text-error text-sm">{{ trip }}</p>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-2 md:gap-4">
+              <!-- BASIC INFO -->
+              <fieldset>
+                <!-- TITLE -->
+                <label class="fieldset-legend">Title</label>
+                <input class="input input-bordered w-full" placeholder="Vacation in Paris"
+                       [formField]="tripForm.title"/>
+                @if (tripForm.title().touched() && tripForm.title().invalid()) {
+                  @for (trip of tripForm.title().errors(); track $index) {
+                    <p class="text-error text-sm">{{ trip.message }}</p>
+                  }
                 }
-              }
-            </fieldset>
+              </fieldset>
 
-            <!-- Cover Image -->
-            <fieldset>
-              <label class="fieldset-legend mt-3">Cover image</label>
-              <input
-                placeholder="Enter the cover image"
-                class="input input-bordered w-full"
-                [formField]="tripForm.coverImageUrl"/>
-              @if (tripForm.coverImageUrl().touched() && tripForm.coverImageUrl().invalid()) {
-                @for (trip of tripForm.coverImageUrl().errors(); track $index) {
-                  <p class="text-error text-sm">{{ trip }}</p>
+              <!-- LOCATION -->
+              <fieldset>
+                <label class="fieldset-legend">Location</label>
+                <input class="input input-bordered w-full" placeholder="Italy" [formField]="tripForm.location"/>
+                @if (tripForm.location().touched() && tripForm.location().invalid()) {
+                  @for (trip of tripForm.location().errors(); track $index) {
+                    <p class="text-error text-sm">{{ trip }}</p>
+                  }
                 }
-              }
-            </fieldset>
-            <!-- DESCRIPTION -->
-            <fieldset>
-              <label class="fieldset-legend mt-3">Description</label>
-              <textarea
-                class="textarea textarea-bordered w-full"
-                [formField]="tripForm.description"
-                placeholder="Enter the description"
-              ></textarea>
-              @if (tripForm.description().touched() && tripForm.description().invalid()) {
-                @for (trip of tripForm.description().errors(); track $index) {
-                  <p class="text-error text-sm">{{ trip }}</p>
-                }
-              }
-            </fieldset>
+              </fieldset>
 
-            <!-- DATES -->
-
-            <div class="grid grid-cols-2 gap-4">
+              <!-- DATES -->
               <div>
                 <fieldset>
                   <label class="fieldset-legend">Start Date</label>
@@ -119,43 +92,41 @@ export interface TripFormModel {
                   }
                 </fieldset>
               </div>
-            </div>
 
-            <!-- STATUS -->
-            <fieldset>
-              <label class="fieldset-legend">Status</label>
-              <select class="select select-bordered w-full" [formField]="tripForm.status">
-                <option value="upcoming">Upcoming</option>
-                <option value="ongoing">Ongoing</option>
-                <option value="completed">Completed</option>
-                <option value="cancelled">Cancelled</option>
-              </select>
-              @if (tripForm.status().touched() && tripForm.status().invalid()) {
-                @for (trip of tripForm.status().errors(); track $index) {
-                  <p class="text-error text-sm">{{ trip }}</p>
+              <!-- STATUS -->
+              <fieldset>
+                <label class="fieldset-legend">Status</label>
+                <select class="select select-bordered w-full" [formField]="tripForm.status">
+                  <option value="upcoming">Upcoming</option>
+                  <option value="ongoing">Ongoing</option>
+                  <option value="completed">Completed</option>
+                  <option value="cancelled">Cancelled</option>
+                </select>
+                @if (tripForm.status().touched() && tripForm.status().invalid()) {
+                  @for (trip of tripForm.status().errors(); track $index) {
+                    <p class="text-error text-sm">{{ trip }}</p>
+                  }
                 }
-              }
-            </fieldset>
+              </fieldset>
 
-            <!-- TYPE -->
-            <fieldset>
-              <label class="fieldset-legend mt-3">Type</label>
-              <select class="select select-bordered w-full" [formField]="tripForm.type">
-                <option value="vacation">Vacation</option>
-                <option value="business">Business</option>
-                <option value="solo">Solo</option>
-                <option value="family">Family</option>
-              </select>
+              <!-- TYPE -->
+              <fieldset>
+                <label class="fieldset-legend">Type</label>
+                <select class="select select-bordered w-full" [formField]="tripForm.type">
+                  <option value="vacation">Vacation</option>
+                  <option value="business">Business</option>
+                  <option value="solo">Solo</option>
+                  <option value="family">Family</option>
+                </select>
 
-              @if (tripForm.type().touched() && tripForm.type().invalid()) {
-                @for (trip of tripForm.type().errors(); track $index) {
-                  <p class="text-error text-sm">{{ trip }}</p>
+                @if (tripForm.type().touched() && tripForm.type().invalid()) {
+                  @for (trip of tripForm.type().errors(); track $index) {
+                    <p class="text-error text-sm">{{ trip }}</p>
+                  }
                 }
-              }
-            </fieldset>
+              </fieldset>
 
-            <!-- FINANCE -->
-            <div class="grid grid-cols-2 gap-4">
+              <!-- FINANCE -->
               <div>
                 <fieldset>
                   <label class="fieldset-legend">Budget</label>
@@ -185,17 +156,37 @@ export interface TripFormModel {
                   }
                 }
               </div>
-            </div>
 
-            <!-- NOTES -->
-            <fieldset>
-              <legend class="fieldset-legend">Additional Notes</legend>
-              <textarea
-                placeholder="Buy some stuffs"
-                class="textarea textarea-bordered w-full"
-                [formField]="tripForm.notes"
-              ></textarea>
-            </fieldset>
+
+              <!-- Cover Image -->
+              <fieldset>
+                <label class="fieldset-legend ">Cover image</label>
+                <input
+                  placeholder="Enter the cover image"
+                  class="input input-bordered w-full"
+                  [formField]="tripForm.coverImageUrl"/>
+                @if (tripForm.coverImageUrl().touched() && tripForm.coverImageUrl().invalid()) {
+                  @for (trip of tripForm.coverImageUrl().errors(); track $index) {
+                    <p class="text-error text-sm">{{ trip }}</p>
+                  }
+                }
+              </fieldset>
+              <!-- DESCRIPTION -->
+              <fieldset>
+                <label class="fieldset-legend">Description</label>
+                <textarea
+                  class="textarea textarea-bordered w-full"
+                  [formField]="tripForm.description"
+                  placeholder="Enter the description"
+                ></textarea>
+                @if (tripForm.description().touched() && tripForm.description().invalid()) {
+                  @for (trip of tripForm.description().errors(); track $index) {
+                    <p class="text-error text-sm">{{ trip }}</p>
+                  }
+                }
+              </fieldset>
+
+            </div>
 
             <!-- SUBMIT -->
             <div class="flex flex-col gap-4 mt-2">
