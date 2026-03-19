@@ -2,9 +2,8 @@
 @import 'tailwindcss';
 
 @plugin "daisyui" {
-  themes:
-    orivio-light --default,
-    orivio;
+  themes: orivio-light --default,
+  orivio;
 }
 
 @plugin "daisyui/theme" {
