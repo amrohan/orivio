@@ -11,7 +11,6 @@ import {
   OnInit
 } from '@angular/core';
 import { CdkVirtualScrollViewport, ScrollingModule } from '@angular/cdk/scrolling';
-import { CommonModule } from '@angular/common';
 
 export interface Day {
   date: Date;
@@ -30,7 +29,7 @@ const getDefaultMaxDate = (): Date => {
 
 @Component({
   selector: 'app-calendar',
-  imports: [CommonModule, ScrollingModule],
+  imports: [ScrollingModule],
   templateUrl: './calendar.html',
   styleUrls: ['./calendar.css'],
 })

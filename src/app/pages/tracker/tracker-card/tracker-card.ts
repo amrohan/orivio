@@ -11,7 +11,7 @@ import { Component } from '@angular/core';
             <h2 class="card-title">
               Gulugulu Day
             </h2>
-            <p class="text-base-content/80">22 Aug 2025</p>
+            <p class="text-base-content/80">20 Dec 2025</p>
           </div>
           <button class="btn btn-ghost">
             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
