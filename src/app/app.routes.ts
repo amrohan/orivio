@@ -1,6 +1,6 @@
 import { Routes } from '@angular/router';
-import {Dashboard} from './pages/dashboard/dashboard';
-import {MainLayout} from './layout/main-layout/main-layout';
+import { Dashboard } from './pages/dashboard/dashboard';
+import { MainLayout } from './layout/main-layout/main-layout';
 
 export const routes: Routes = [
   {
@@ -13,20 +13,30 @@ export const routes: Routes = [
       },
       {
         path: 'tracker',
-        loadComponent: ()=> import('./pages/tracker/tracker').then((m) =>m.Tracker),
+        loadComponent: () => import('./pages/tracker/tracker').then((m) => m.Tracker),
       },
       {
         path: 'food',
-        loadComponent: ()=> import('./pages/food/food').then((m) =>m.Food),
+        loadComponent: () => import('./pages/food/food').then((m) => m.Food),
       },
       {
         path: 'places',
-        loadComponent: ()=> import('./pages/places/places').then((m) =>m.Places),
+        children: [
+          {
+            path: '',
+            loadComponent: () => import('./pages/places/places').then((m) => m.Places),
+          },
+          {
+            path: 'trip-form',
+            loadComponent: () =>
+              import('./pages/places/trip-form/trip-form').then((m) => m.TripForm),
+          },
+        ],
       },
       {
         path: 'settings',
-        loadComponent: ()=> import('./pages/settings/settings').then((m) => m.Settings),
-      }
-    ]
+        loadComponent: () => import('./pages/settings/settings').then((m) => m.Settings),
+      },
+    ],
   },
 ];
